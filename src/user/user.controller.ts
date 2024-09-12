@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, UseGuards } from '@nestjs/common';
+import { Controller, Get,Query, Post, Body, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from '../auth/create-user.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
@@ -10,15 +10,18 @@ import { UserRole } from './user.schema';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post('N')
-  async createUser(@Body() createUserDto: CreateUserDto) {
-    return this.userService.createUser(createUserDto);
-  }
-
-  //@UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN)
   @Get()
   async getAllUsers() {
     return this.userService.findAll();
+  }  
+
+  @Post('N')
+  @UsePipes(new ValidationPipe({ transform: true })) 
+  async createUser(@Body() createUserDto: CreateUserDto) {
+    return this.userService.createUser(createUserDto);
   }
 }
+
+

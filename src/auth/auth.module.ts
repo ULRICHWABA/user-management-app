@@ -9,11 +9,11 @@ import { AuthController } from './auth.controller';
 
 @Module({
   imports: [
-    UserModule, // Import du module User
+    UserModule, 
     PassportModule,
     JwtModule.register({
-      secret: 'SECRET_KEY', // Clé secrète pour JWT
-      signOptions: { expiresIn: '1h' }, // Token expire en 1h
+      secret: 'SECRET_KEY', 
+      signOptions: { expiresIn: '1h' }, 
     }),
   ],
   
